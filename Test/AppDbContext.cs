@@ -15,6 +15,13 @@ namespace Test
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+           // modelBuilder.Entity<OrderCar>().HasOne(x => x.Car);
+           // modelBuilder.Entity<OrderCar>().HasOne(x => x.Order).WithMany().OnDelete( DeleteBehavior.SetNull).IsRequired(false);
+           // modelBuilder.Entity<Order>().HasMany(x => x.Cars).WithOne(x=>x.Order).IsRequired(false).OnDelete( DeleteBehavior.SetNull);
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -23,6 +30,7 @@ namespace Test
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Car> Cars { get; set; }
+        public virtual DbSet<OrderCar> OrderCars { get; set; }
         public virtual DbSet<ManagerInfo> ManagerInfos { get; set; }
 
     }

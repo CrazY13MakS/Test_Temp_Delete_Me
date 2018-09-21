@@ -10,8 +10,8 @@ using Test;
 namespace Test.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180921173016_Init")]
-    partial class Init
+    [Migration("20180921190430_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,25 +64,40 @@ namespace Test.Migrations
 
                     b.Property<string>("Adress");
 
-                    b.Property<int>("CarId");
-
                     b.Property<string>("City");
 
                     b.Property<string>("Country");
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("UserId");
 
-                    b.Property<int>("Userid");
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Test.OrderCar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CarId");
+
+                    b.Property<int?>("OrderId");
+
+                    b.Property<int>("Quantity");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("Userid");
+                    b.HasIndex("OrderId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("OrderCars");
                 });
 
             modelBuilder.Entity("Test.User", b =>
@@ -112,15 +127,22 @@ namespace Test.Migrations
 
             modelBuilder.Entity("Test.Order", b =>
                 {
-                    b.HasOne("Test.Car", "Car")
+                    b.HasOne("Test.User", "User")
                         .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Test.OrderCar", b =>
+                {
+                    b.HasOne("Test.Car", "Car")
+                        .WithMany("OrderCars")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Test.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("Userid")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Test.Order", "Order")
+                        .WithMany("Cars")
+                        .HasForeignKey("OrderId");
                 });
 #pragma warning restore 612, 618
         }

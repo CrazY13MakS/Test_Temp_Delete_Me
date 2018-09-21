@@ -14,6 +14,6 @@ namespace Test
 
         public decimal Price { get; set; }
 
-        public List<Order> Orders { get; set; }
+        public List<OrderCar> OrderCars { get; set; }
     }
 }
